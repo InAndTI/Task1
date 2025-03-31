@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "uF8ogqiKjfRZVBSss1s1HIiDzogWsfaAOatDlu+y2CU=",
+  "Source": "Task1.Worker",
+  "BasePath": "_content/Task1.Worker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

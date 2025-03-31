@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  manager:
+    build: ./Task1.Manager
+    ports:
+      - "8080:8080"
+    networks:
+      - crackhash_net
+
+  worker1:
+    build: ./Task1.Worker
+    depends_on:
+      - manager
+    networks:
+      - crackhash_net
+    environment:
+      - SERVICE_NAME=worker1
+
+  worker2:
+    build: ./Task1.Worker
+    depends_on:
+      - manager
+    networks:
+      - crackhash_net
+    environment:
+      - SERVICE_NAME=worker2
+
+  worker3:
+    build: ./Task1.Worker
+    depends_on:
+      - manager
+    networks:
+      - crackhash_net
+    environment:
+      - SERVICE_NAME=worker3
+
+networks:
+  crackhash_net:
+    driver: bridge
