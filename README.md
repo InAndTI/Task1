@@ -18,20 +18,30 @@ sudo apt-get update
 sudo apt-get install -y dotnet-sdk-6.0
 ```
 # Для Docker
+```bash
 sudo apt-get install docker.io docker-compose
+```
 
 ### 2. Запуск системы
 # Вариант 1 - Локальный запуск
+```bash
 (cd Task1.Manager && dotnet run) & (cd Task1.Worker && dotnet run)
+```
 
 # Вариант 2 - Через Docker
+```bash
 docker-compose up --build
+```
 
 ### 3. Примеры запросов
 # Создание задачи
+```bash
 curl -X POST http://localhost:8080/api/hash/crack \
   -H "Content-Type: application/json" \
   -d '{"hash":"5d41402abc4b2a76b9719d911017c592","maxLength":4}'
+```
 
 # Проверка статуса
+```bash
 curl "http://localhost:8080/api/hash/status?requestId=123e4567-e89b-12d3-a456-426614174000"
+```
