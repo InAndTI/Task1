@@ -16,7 +16,7 @@ wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.
 sudo dpkg -i packages-microsoft-prod.deb
 sudo apt-get update
 sudo apt-get install -y dotnet-sdk-6.0
-
+'''
 # Для Docker
 sudo apt-get install docker.io docker-compose
 
