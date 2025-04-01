@@ -1,76 +1,37 @@
-CrackHash Distributed System
-====================================
+# CrackHash Distributed System
 
-CrackHash — распределенная система для взлома хэшей методом перебора. Состоит из:
-- Менеджер: Принимает задачи, разделяет на части, управляет воркерами
-- Воркеры: Выполняют вычислительные задачи
+## Описание
+Распределённая система для взлома хэшей методом перебора
 
-Архитектура:
-1. Клиент → POST /api/hash/crack → Менеджер
-2. Менеджер разбивает задачу на 33 части → рассылает воркерам
-3. Воркеры → PATCH /api/hash/update-status → Менеджер
-4. Клиент проверяет статус → GET /api/hash/status
+## Компоненты
+- Менеджер (Manager): принимает задачи, распределяет подзадачи
+- Воркеры (Workers): выполняют вычисления
 
-Требования:
-- .NET 6+
-- Docker (опционально)
+## Быстрый старт
 
-Структура:
-- Менеджер: Task1.Manager/Program.cs
-  API:
-  - POST /api/hash/crack – создать задачу
-  - GET /api/hash/status – проверить статус
-  - PATCH /api/hash/update-status – обновить прогресс
+### 1. Установка зависимостей
+```bash
+# Для .NET (Ubuntu)
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-6.0
 
-- Воркеры: Task1.Worker/Program.cs
+# Для Docker
+sudo apt-get install docker.io docker-compose
 
-Конфигурация (appsettings.json):
-{
-  "AppSettings": {
-    "WorkerUrls": ["http://worker1:8080/api/hash/task", ...],
-    "WorkerUrl": "http://worker:8080/api/hash/task",
-    "ManagerUrl": "http://manager:8080/api/hash/update-status"
-  }
-}
+### 2. Запуск системы
+# Вариант 1 - Локальный запуск
+(cd Task1.Manager && dotnet run) & (cd Task1.Worker && dotnet run)
 
-Запуск:
-Локально:
-1. Менеджер:
-   cd Task1.Manager
-   dotnet run
-
-2. Воркеры:
-   cd ../Task1.Worker
-   dotnet run
-
-Через Docker:
+# Вариант 2 - Через Docker
 docker-compose up --build
 
-API Примеры:
-1. Создать задачу:
-POST /api/hash/crack
-{
-  "hash": "e2fc714c4727ee9395f324cd2e7f331f",
-  "maxLength": 4
-}
-→ { "requestId": "123e4567..." }
+### 3. Примеры запросов
+# Создание задачи
+curl -X POST http://localhost:8080/api/hash/crack \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"5d41402abc4b2a76b9719d911017c592","maxLength":4}'
 
-2. Проверить статус:
-GET /api/hash/status?requestId=123...
-→ {
-  "status": "PARTIAL_READY",
-  "progress": 45.45,
-  "data": ["result1", ...]
-}
-
-3. Обновить прогресс (для воркеров):
-PATCH /api/hash/update-status
-{
-  "requestId": "123...",
-  "results": ["31", "32"],
-  "partCount": 33
-}
-
-Логи:
-Отправка части 0 на http://worker1:8080/api/hash/task
-Processed part 31, Total completed: 1
+# Проверка статуса
+curl "http://localhost:8080/api/hash/status?requestId=123e4567-e89b-12d3-a456-426614174000"
